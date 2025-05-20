@@ -29,9 +29,15 @@ footer, header, hgroup, menu, nav, section {
 	display: block;}
 
 img {
+<<<<<<< HEAD
 	max-width: 100%;
 	height: auto;
 	display: block;
+=======
+  max-width: 100%;
+  height: auto;
+  display: block;
+>>>>>>> 6dacce99e97f7892cc07cf03c4c15fe2959c5d7b
 }
 
 body {
