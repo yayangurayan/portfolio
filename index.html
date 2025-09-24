@@ -1,426 +1,215 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andrian Kho - Digital Business Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Andrian - Perintis Digitalisasi Bisnis</title>
+    
+    <!-- CSS Kustom -->
     <link rel="stylesheet" href="style.css">
-    <meta property="og:title" content="Andrian Kho – Digital Business Portfolio" />
-    <meta property="og:description" content="Explore my digital business, game development, and capital market projects." />
-    <meta name="image" property="og:image" content="https://yayangurayan.github.io/portfolio/thumbnail.jpg">
-    <meta property="og:url" content="https://yayangurayan.github.io/portfolio" />
-    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Ikon (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
-    <!-- Header & Navigation -->
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <a href="#" class="logo">Andrian<span>.</span></a>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">Profile</a></li>
-                    <li><a href="#experience">Experience</a></li>
-                    <li><a href="#education">Education</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-                <div class="hamburger">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </nav>
-        </div>
-    </header>
+<body class="dark-theme">
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container hero-container">
-            <div class="hero-content">
-                <span class="tagline">Digital Business Specialist</span>
-                <h1>Hi, I'm <span>Andrian Kho</span></h1>
-                <p>Digital Business student at Universitas Negeri Medan focused on digital transformation for MSMEs and capital market analysis. Committed to creating innovative solutions that enhance business efficiency and competitiveness.</p>
-                <div class="hero-btns">
-                    <a href="#contact" class="btn">Contact Me</a>
-                </div>
-                <div class="social-icons">
-                    <a href="mailto:andriandareen@gmail.com"><i class="fas fa-envelope"></i></a>
-                    <a href="tel:081396815717"><i class="fas fa-phone"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-github"></i></a>
-                </div>
-            </div>
-            <div class="hero-img">
-                <img src="foto-profil.webp" alt="Andrian's Profile">
-            </div>
-        </div>
-    </section>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-logo">Andrian.</div>
+    </div>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="section-title">
-                <h2>My Profile</h2>
-            </div>
+    <!-- Konten Utama -->
+    <div id="main-content">
+        <!-- Latar Belakang Partikel -->
+        <div id="particles-js"></div>
 
-            <div class="summary-box">
-                <p>A Digital Business undergraduate student at Universitas Negeri Medan with a strong commitment to advancing technology and driving digital transformation in the business sector. Deeply interested in capital market analysis and the application of digital solutions to enhance efficiency and competitiveness, particularly for micro, small, and medium enterprises (MSMEs). I uphold values of integrity, discipline, and responsibility in both academic and organizational experiences. With a spirit of innovation and leadership, I am determined to become a pioneer in empowering business digitalization in Indonesia through adaptive, sustainable, and data-driven approaches.</p>
-            </div>
+        <!-- Custom Cursor -->
+        <div class="cursor-dot"></div>
+        <div class="cursor-outline"></div>
 
-            <div class="info-grid">
-                <div class="info-item">
-                    <i class="fas fa-user"></i>
-                    <div class="info-text">
-                        <h4>Full Name</h4>
-                        <p>Andrian Kho</p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-envelope"></i>
-                    <div class="info-text">
-                        <h4>Email</h4>
-                        <p>andriandareen@gmail.com</p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-phone"></i>
-                    <div class="info-text">
-                        <h4>Phone</h4>
-                        <p>081396815717</p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div class="info-text">
-                        <h4>Location</h4>
-                        <p>Medan, Indonesia</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience & Projects -->
-    <section id="experience" class="experience">
-        <div class="container">
-            <div class="section-title">
-                <h2>Experience & Projects</h2>
-            </div>
-
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <span class="timeline-date">2025 - Present</span>
-                        <h3>Tapstok: NFC-Based Stock Management System for MSME Empowerment</h3>
-                        <h4>P2MW</h4>
-                        <ul>
-                            <li>Led a team of 4 members in developing an NFC-integrated stock management system for local MSMEs</li>
-                            <li>Designed an app that records incoming and outgoing goods in real-time using NFC stickers</li>
-                            <li>Conducted trials on 10+ MSME products and successfully reduced inventory errors by up to 70%</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <span class="timeline-date">April 2025 - Present</span>
-                        <h3>Digitalization of Bus Travel Ticket Booking Service via Website</h3>
-                        <ul>
-                            <li>Developed a web-based ticket booking platform for intercity bus travel service providers</li>
-                            <li>Designed key features such as route search, schedule selection, and order management</li>
-                            <li>Built the MVP using HTML, CSS, and JavaScript with responsive UI simulation</li>
-                            <li>Aimed to support small transport businesses in reducing manual operations and improving efficiency</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <span class="timeline-date">2024</span>
-                        <h3>President Director</h3>
-                        <h4>GIBEL UNIMED</h4>
-                        <ul>
-                            <li>Led over 20 members in the campus investor education division</li>
-                            <li>Organized 5+ financial literacy events reaching more than 300 students</li>
-                            <li>Improved event budget efficiency by 30%</li>
-                            <li>Contributed to the creation of a Capital Market School program for students</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <span class="timeline-date">August 2024 - October 2024</span>
-                        <h3>Volunteer - Stocklab Competition Crew</h3>
-                        <h4>Young Investment Competition for Gen-Z (Unimed x Microskill x UMI)</h4>
-                        <ul>
-                            <li>Assisted in the execution of intercampus stocklab competition involving 100+ participants</li>
-                            <li>Supported technical setup, participant coordination, and timekeeping during the event</li>
-                            <li>Ensured smooth competition flow under tight schedules and collaborative cross-campus team</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Clearfix for float issues -->
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Education & Certifications -->
-    <section id="education" class="education">
-        <div class="container">
-            <div class="section-title">
-                <h2>Education & Certifications</h2>
-            </div>
-
-            <div class="edu-cards">
-                <div class="edu-card">
-                    <i class="fas fa-graduation-cap"></i>
-                    <h3>Bachelor's Degree in Digital Business</h3>
-                    <h4>Universitas Negeri Medan</h4>
-                    <p>Graduating June 2027 with GPA 3.86</p>
-                </div>
-
-                <div class="edu-card">
-                    <i class="fas fa-certificate"></i>
-                    <h3>Capital Market School</h3>
-                    <h4>Indonesia Stock Exchange - 2025</h4>
-                    <p>Studied capital market instruments, investment strategies, and technical and fundamental analysis—relevant to improving analytical and financial decision-making skills.</p>
-                </div>
-
-                <div class="edu-card">
-                    <i class="fas fa-book"></i>
-                    <h3>Public Lecture on Financial System Stability and Macroprudential Policy</h3>
-                    <h4>Bank Indonesia Journals - 2024</h4>
-                    <p>Gained insights into the role of monetary policy and the national financial system, essential for understanding macroeconomic contexts in digital business strategy development.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <div class="section-title">
-                <h2>Skills</h2>
-            </div>
-
-            <div class="skills-container">
-                <div class="skill-category">
-                    <h3>Technical Skills</h3>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>C#</span>
-                            <span>65%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="65"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>Unity</span>
-                            <span>70%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="70"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>TradingView</span>
-                            <span>90%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="90"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>Microsoft Office</span>
-                            <span>95%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="95"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Soft Skills</h3>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>Leadership</span>
-                            <span>80%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="80"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>Public Speaking</span>
-                            <span>85%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="85"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>Problem Solving</span>
-                            <span>75%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="75"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Languages</h3>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>English (Fluent)</span>
-                            <span>88%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="88"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>Bahasa Indonesia (Native)</span>
-                            <span>100%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" data-width="100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-title">
-                <h2>Contact Me</h2>
-            </div>
-
-            <div class="contact-container">
-                <div class="contact-info">
-                    <h3>Contact Information</h3>
-                    <p>Please contact me using the form or directly through the information below:</p>
-
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <div class="contact-text">
-                            <h4>Email</h4>
-                            <p>andriandareen@gmail.com</p>
-                        </div>
-                    </div>
-
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <div class="contact-text">
-                            <h4>Phone</h4>
-                            <p>081396815717</p>
-                        </div>
-                    </div>
-
-                    <div class="contact-item">
-                        <i class="fab fa-linkedin"></i>
-                        <div class="contact-text">
-                            <h4>LinkedIn</h4>
-                            <p>in/andrian-kho-947497264</p>
-                        </div>
-                    </div>
-
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div class="contact-text">
-                            <h4>Address</h4>
-                            <p>Universitas Negeri Medan, Medan, Indonesia</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <input type="text" placeholder="Full Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" placeholder="Email Address" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" placeholder="Subject" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea placeholder="Your Message" required></textarea>
-                        </div>
-                        <button type="submit" class="btn">Send Message</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <h4>Andrian Kho</h4>
-                    <p>Digital Business Specialist focused on digital transformation for MSMEs and capital market analysis.</p>
-                    <div class="social-icons">
-                        <a href="mailto:andriandareen@gmail.com"><i class="fas fa-envelope"></i></a>
-                        <a href="tel:081396815717"><i class="fas fa-phone"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-
-                <div class="footer-col">
-                    <h4>Links</h4>
-                    <ul class="footer-links">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">Profile</a></li>
-                        <li><a href="#experience">Experience</a></li>
-                        <li><a href="#education">Education</a></li>
-                        <li><a href="#skills">Skills</a></li>
-                        <li><a href="#contact">Contact</a></li>
+        <!-- Header & Navigasi -->
+        <header class="header">
+            <div class="container">
+                <nav class="navbar">
+                    <a href="#hero" class="nav-logo">Andrian.</a>
+                    <ul class="nav-menu">
+                        <li class="nav-item"><a href="#hero" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="#about" class="nav-link">Tentang</a></li>
+                        <li class="nav-item"><a href="#projects" class="nav-link">Proyek</a></li>
+                        <li class="nav-item"><a href="#skills" class="nav-link">Keahlian</a></li>
+                        <li class="nav-item"><a href="#experience" class="nav-link">Pengalaman</a></li>
+                        <li class="nav-item"><a href="#contact" class="nav-link">Kontak</a></li>
                     </ul>
-                </div>
-
-                <div class="footer-col">
-                    <h4>Key Expertise</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">MSME Digital Transformation</a></li>
-                        <li><a href="#">Capital Market Analysis</a></li>
-                        <li><a href="#">Technology Solution Development</a></li>
-                        <li><a href="#">Project Management</a></li>
-                        <li><a href="#">Financial Literacy</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
-                    <h4>Download CV</h4>
-                    <p>Get a complete copy of my CV for more detailed information.</p>
-                    <a href="https://drive.google.com/file/d/1qokv299MEcv3BwY2fX_STV_kioRccc1s/view?usp=drivesdk" class="btn btn-light" download target="_blank">Download CV</a>
-                </div>
+                    <div class="nav-right">
+                        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Light/Dark Theme">
+                            <i class="fa-solid fa-sun"></i>
+                            <i class="fa-solid fa-moon"></i>
+                        </button>
+                        <div class="hamburger">
+                            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                        </div>
+                    </div>
+                </nav>
             </div>
+        </header>
 
-            <div class="copyright">
-                <p>&copy; 2025 Andrian Kho. All Rights Reserved.</p>
+        <main>
+            <!-- Hero Section -->
+            <section id="hero" class="hero section">
+                <div class="container hero-container">
+                    <div class="hero-content">
+                        <span class="subtitle reveal">Halo, saya Andrian.</span>
+                        <h1 class="title reveal">Saya Seorang <span class="typing-text gradient-text"></span></h1>
+                        <p class="description reveal">Mahasiswa Bisnis Digital dengan misi mendorong transformasi teknologi untuk UMKM melalui solusi yang adaptif, berkelanjutan, dan berbasis data.</p>
+                        <div class="hero-buttons reveal">
+                            <a href="#projects" class="btn btn-primary">Lihat Proyek Saya</a>
+                            <a href="#contact" class="btn btn-secondary">Hubungi Saya</a>
+                        </div>
+                    </div>
+                    <div class="hero-image-wrapper reveal">
+                        <div id="dynamic-gradient-border" class="animated-gradient-border">
+                            <img src="https://placehold.co/400x400/161b22/E5E7EB?text=Andrian" alt="Foto Profil Andrian" class="profile-picture">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="about section">
+                <div class="container about-container">
+                    <div class="section-title reveal"><h2 class="gradient-text">Cerita Saya</h2></div>
+                    <p class="about-text reveal">Lahir di Pematangsiantar, saya tumbuh dengan ketertarikan mendalam pada dua dunia: dinamika pasar modal dan potensi tak terbatas dari teknologi digital. Sebagai mahasiswa Bisnis Digital di Universitas Negeri Medan, saya tidak hanya belajar teori, tetapi juga secara aktif menerapkannya. Saya percaya bahwa setiap baris kode, setiap strategi digital, dan setiap analisis data memiliki kekuatan untuk mengubah bisnis, terutama UMKM yang menjadi tulang punggung ekonomi Indonesia. Integritas, disiplin, dan inovasi adalah kompas yang memandu setiap langkah saya.</p>
+                </div>
+            </section>
+            
+            <!-- Projects Section -->
+            <section id="projects" class="projects section">
+                <div class="container">
+                    <div class="section-title reveal"><h2 class="gradient-text">Proyek Unggulan</h2></div>
+                    <div class="projects-grid">
+                        <article class="project-card reveal">
+                            <div class="project-image"><img src="https://placehold.co/600x400/8B5CF6/FFFFFF?text=Tapstok" alt="Proyek Tapstok"></div>
+                            <div class="project-content">
+                                <span class="project-category">P2MW Project</span>
+                                <h3 class="project-title">Tapstok: Sistem Manajemen Stok NFC</h3>
+                                <p class="project-description">Merancang dan memimpin pengembangan aplikasi manajemen stok berbasis NFC yang mengurangi error inventaris UMKM hingga 70%.</p>
+                                <div class="project-tags"><span>NFC</span><span>Manajemen Stok</span><span>UMKM</span></div>
+                                <div class="project-links"><a href="#" class="link-disabled">Studi Kasus</a> <a href="#" class="link-disabled">Live Demo</a></div>
+                            </div>
+                        </article>
+                        <article class="project-card reveal">
+                            <div class="project-image"><img src="https://placehold.co/600x400/EC4899/FFFFFF?text=Tiket+Bus" alt="Proyek Digitalisasi Tiket Bus"></div>
+                            <div class="project-content">
+                                <span class="project-category">Proyek Pribadi</span>
+                                <h3 class="project-title">Digitalisasi Tiket Perjalanan Bus</h3>
+                                <p class="project-description">Membangun MVP platform booking tiket untuk membantu bisnis transportasi kecil go-digital dan mengurangi operasi manual.</p>
+                                <div class="project-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+                                <div class="project-links"><a href="#" class="link-disabled">Lihat Kode</a></div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Skills & Certifications Section -->
+            <section id="skills" class="skills section">
+                <div class="container">
+                    <div class="section-title reveal"><h2 class="gradient-text">Keahlian & Sertifikasi</h2></div>
+                    <div class="skills-container">
+                        <div class="skills-column reveal">
+                            <h3>Keahlian Teknis</h3>
+                            <div class="skills-grid">
+                                <div class="skill-item"><i class="fa-brands fa-html5"></i> HTML</div>
+                                <div class="skill-item"><i class="fa-brands fa-css3-alt"></i> CSS</div>
+                                <div class="skill-item"><i class="fa-brands fa-js"></i> JavaScript</div>
+                                <div class="skill-item"><i class="fa-solid fa-c"></i> C#</div>
+                                <div class="skill-item"><i class="fa-brands fa-unity"></i> Unity</div>
+                                <div class="skill-item"><i class="fa-solid fa-chart-simple"></i> TradingView</div>
+                            </div>
+                        </div>
+                        <div class="skills-column reveal">
+                            <h3>Sertifikasi Profesional</h3>
+                            <div class="cert-item">
+                                <i class="fa-solid fa-award"></i>
+                                <div>
+                                    <h4>Capital Market School</h4>
+                                    <p>Indonesia Stock Exchange (BEI)</p>
+                                </div>
+                            </div>
+                            <div class="cert-item">
+                                <i class="fa-solid fa-landmark"></i>
+                                <div>
+                                    <h4>Financial System Stability</h4>
+                                    <p>Bank Indonesia Journals</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience" class="experience section">
+                <div class="container">
+                    <div class="section-title reveal"><h2 class="gradient-text">Perjalanan Profesional</h2></div>
+                    <div class="timeline">
+                        <div class="timeline-item reveal">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <p class="timeline-date">Okt 2024 - Sekarang</p>
+                                <h3 class="timeline-title">President Director</h3>
+                                <p class="timeline-company">GIBEI UNIMED</p>
+                                <p class="timeline-duties">Memimpin tim, mengelola acara literasi keuangan, dan meningkatkan efisiensi anggaran 30%.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item reveal">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <p class="timeline-date">Agu 2024 - Okt 2024</p>
+                                <h3 class="timeline-title">Volunteer - Stocklab Competition Crew</h3>
+                                <p class="timeline-company">Kompetisi Investasi Muda</p>
+                                <p class="timeline-duties">Bertanggung jawab atas koordinasi teknis dan kelancaran acara untuk 100+ peserta.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Contact Section -->
+            <section id="contact" class="contact section">
+                <div class="container contact-container">
+                    <div class="section-title reveal"><h2 class="gradient-text">Mari Terhubung</h2></div>
+                    <p class="contact-text reveal">Saya percaya kolaborasi adalah kunci inovasi. Jika Anda memiliki ide, proyek, atau sekadar ingin berdiskusi tentang persimpangan antara bisnis dan teknologi, pintu digital saya selalu terbuka.</p>
+                    <div class="reveal">
+                        <a href="mailto:andriandareen@gmail.com" class="btn btn-primary contact-button">Kirim Pesan</a>
+                    </div>
+                    <div class="social-links reveal">
+                        <a href="https://linkedin.com/in/andrian-kho-947a97264" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="https://github.com" target="_blank" aria-label="GitHub" class="link-disabled"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2025 Andrian. Diciptakan dengan hasrat untuk kode dan inovasi.</p>
             </div>
-        </div>
-    </footer>
+        </footer>
 
+        <!-- Tombol Kembali ke Atas -->
+        <a href="#hero" class="back-to-top" aria-label="Kembali ke atas"><i class="fa-solid fa-arrow-up"></i></a>
+    </div>
+
+    <!-- Library Partikel JS -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- JS Kustom -->
     <script src="script.js"></script>
 </body>
 </html>
