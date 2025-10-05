@@ -1,196 +1,80 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { create } from 'zustand';
-import { Stage, Layer, Rect, Text } from 'react-konva'; // Placeholder for game elements
+import React, { useState, useEffect } from 'react';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver.js';
 
-// --- STATE MANAGEMENT with Zustand ---
-// Mengelola status game: 'start', 'playing', 'won'
-const useGameStore = create((set) => ({
-  gameStatus: 'start', // 'start', 'playing', 'won'
-  startGame: () => set({ gameStatus: 'playing' }),
-  winGame: () => set({ gameStatus: 'won' }),
-}));
+// Komponen Pembantu untuk Animasi
+const AnimatedSection = ({ children }) => {
+  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
+  return (
+    <div ref={ref} className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+      {children}
+    </div>
+  );
+};
 
-// --- Custom Hooks ---
-
-// Hook untuk animasi "reveal on scroll"
-const useIntersectionObserver = (options) => {
-  const containerRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
+// Komponen Pembantu untuk Efek Ketik
+const TypingEffect = () => {
+  const [text, setText] = useState('');
+  const words = ["Inovator Digital.", "Analis Pasar.", "Problem Solver."];
+  
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true);
-        observer.unobserve(entry.target);
-      }
-    }, options);
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typingTimeout;
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+    function type() {
+      const currentWord = words[wordIndex];
+      const speed = isDeleting ? 80 : 150;
+      
+      if (isDeleting) {
+        setText(currentWord.substring(0, charIndex - 1));
+        charIndex--;
+      } else {
+        setText(currentWord.substring(0, charIndex + 1));
+        charIndex++;
+      }
+
+      if (!isDeleting && charIndex === currentWord.length) {
+        typingTimeout = setTimeout(() => { isDeleting = true; }, 2000);
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        typingTimeout = setTimeout(type, 500);
+      } else {
+        typingTimeout = setTimeout(type, speed);
+      }
     }
 
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, [containerRef, options]);
+    typingTimeout = setTimeout(type, 250);
 
-  return [containerRef, isVisible];
-};
-
-
-// Hook untuk custom cursor
-const useMousePosition = () => {
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            setPosition({ x: e.clientX, y: e.clientY });
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
-
-    return position;
-};
-
-
-// --- Game Components ---
-
-const StartScreen = () => {
-  const startGame = useGameStore((state) => state.startGame);
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-dark-bg text-dark-font font-inter p-4 text-center">
-      <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
-        The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-1-dark to-primary-2-dark">Developer's Odyssey</span>
-      </h1>
-      <p className="text-lg text-dark-font-secondary mb-8 max-w-2xl">
-        Sebuah perjalanan interaktif melalui karier seorang developer. Kumpulkan item, atasi rintangan, dan buka portofolio di akhir perjalanan.
-      </p>
-      <button
-        onClick={startGame}
-        className="px-8 py-3 font-semibold text-white rounded-full bg-gradient-to-r from-primary-1-dark to-primary-2-dark hover:scale-105 hover:shadow-xl hover:shadow-primary-1-dark/20 transition-all duration-300 text-lg"
-      >
-        Mulai Petualangan
-      </button>
-    </div>
-  );
-};
-
-const GameComponent = () => {
-  const winGame = useGameStore((state) => state.winGame);
+    return () => clearTimeout(typingTimeout);
+  }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-dark-bg text-dark-font font-inter p-4">
-       {/* Placeholder untuk Canvas Game dengan React-Konva */}
-      <div className="w-full max-w-4xl h-[500px] bg-dark-bg-secondary border border-dark-border rounded-lg shadow-lg mb-8 text-center flex items-center justify-center">
-        <p className="text-dark-font-secondary">Area Game Canvas (Dalam Pengembangan)</p>
-      </div>
-       <div className="text-center">
-           <p className="mb-6 text-sm text-dark-font-secondary">Untuk tujuan demonstrasi, klik tombol di bawah untuk menyelesaikan game.</p>
-            <button
-              onClick={winGame}
-              className="px-8 py-3 font-semibold text-white rounded-full bg-gradient-to-r from-primary-1-dark to-primary-2-dark hover:scale-105 hover:shadow-xl transition-transform duration-300"
-            >
-              Selesaikan Game & Buka Portofolio
-            </button>
-        </div>
-    </div>
+    <span className="typing-text text-transparent bg-clip-text bg-gradient-to-r from-primary-1-dark to-primary-2-dark">
+      {text}
+    </span>
   );
 };
 
 
-// --- Portofolio Component ---
-
-const FinalPortfolioComponent = () => {
-
-  const TypingEffect = () => {
-    const [text, setText] = useState('');
-    const words = ["Inovator Digital.", "Analis Pasar.", "Problem Solver."];
-    const typingSpeed = 150;
-    const deletingSpeed = 80;
-    const delay = 2000;
-    
-    useEffect(() => {
-      let wordIndex = 0;
-      let charIndex = 0;
-      let isDeleting = false;
-      let timeoutId;
-      let intervalId;
-
-      const type = () => {
-          const currentWord = words[wordIndex];
-          if (isDeleting) {
-              setText(currentWord.substring(0, charIndex - 1));
-              charIndex--;
-          } else {
-              setText(currentWord.substring(0, charIndex + 1));
-              charIndex++;
-          }
-
-          if (!isDeleting && charIndex === currentWord.length) {
-              timeoutId = setTimeout(() => { isDeleting = true; }, delay);
-          } else if (isDeleting && charIndex === 0) {
-              isDeleting = false;
-              wordIndex = (wordIndex + 1) % words.length;
-          }
-      };
-      
-      intervalId = setInterval(type, isDeleting ? deletingSpeed : typingSpeed);
-
-      return () => {
-        clearInterval(intervalId);
-        clearTimeout(timeoutId);
-      };
-    }, []);
-
-    return (
-      <span className="typing-text text-transparent bg-clip-text bg-gradient-to-r from-primary-1-dark to-primary-2-dark">
-        {text}
-      </span>
-    );
-  };
-
-  const AnimatedSection = ({ children }) => {
-    const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
-    return (
-      <div
-        ref={ref}
-        className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-      >
-        {children}
-      </div>
-    );
-  };
-  
+const FinalPortfolio = () => {
+  // Data untuk konten portofolio
   const techSkills = [
-    { name: 'HTML', icon: 'fa-brands fa-html5' },
-    { name: 'CSS', icon: 'fa-brands fa-css3-alt' },
-    { name: 'JavaScript', icon: 'fa-brands fa-js' },
-    { name: 'C#', icon: 'fa-solid fa-c' },
-    { name: 'Unity', icon: 'fa-brands fa-unity' },
-    { name: 'TradingView', icon: 'fa-solid fa-chart-simple' }
+    { name: 'HTML', icon: 'fa-brands fa-html5' }, { name: 'CSS', icon: 'fa-brands fa-css3-alt' }, { name: 'JavaScript', icon: 'fa-brands fa-js' },
+    { name: 'C#', icon: 'fa-solid fa-c' }, { name: 'Unity', icon: 'fa-brands fa-unity' }, { name: 'TradingView', icon: 'fa-solid fa-chart-simple' }
   ];
-
   const certifications = [
     { title: 'Capital Market School', issuer: 'Indonesia Stock Exchange (BEI)', icon: 'fa-solid fa-award' },
     { title: 'Financial System Stability', issuer: 'Bank Indonesia Journals', icon: 'fa-solid fa-landmark' }
   ];
-
   const experiences = [
-    {
-      date: 'Okt 2024 - Sekarang',
-      title: 'President Director',
-      company: 'GIBEI UNIMED',
-      duties: 'Memimpin tim, mengelola acara literasi keuangan, dan meningkatkan efisiensi anggaran 30%.'
-    },
-    {
-      date: 'Agu 2024 - Okt 2024',
-      title: 'Volunteer - Stocklab Competition Crew',
-      company: 'Kompetisi Investasi Muda',
-      duties: 'Bertanggung jawab atas koordinasi teknis dan kelancaran acara untuk 100+ peserta.'
-    }
+    { date: 'Okt 2024 - Sekarang', title: 'President Director', company: 'GIBEI UNIMED', duties: 'Memimpin tim, mengelola acara literasi keuangan, dan meningkatkan efisiensi anggaran 30%.'},
+    { date: 'Agu 2024 - Okt 2024', title: 'Volunteer - Stocklab Competition Crew', company: 'Kompetisi Investasi Muda', duties: 'Bertanggung jawab atas koordinasi teknis dan kelancaran acara untuk 100+ peserta.'}
+  ];
+  const projects = [
+    {img: 'https://placehold.co/600x400/8B5CF6/FFFFFF?text=Tapstok', cat: 'P2MW Project', title: 'Tapstok: Sistem Manajemen Stok NFC', desc: 'Merancang dan memimpin pengembangan aplikasi manajemen stok berbasis NFC yang mengurangi error inventaris UMKM hingga 70%.', tags: ['NFC', 'Manajemen Stok', 'UMKM']},
+    {img: 'https://placehold.co/600x400/EC4899/FFFFFF?text=Tiket+Bus', cat: 'Proyek Pribadi', title: 'Digitalisasi Tiket Perjalanan Bus', desc: 'Membangun MVP platform booking tiket untuk membantu bisnis transportasi kecil go-digital dan mengurangi operasi manual.', tags: ['HTML', 'CSS', 'JavaScript']}
   ];
 
   return (
@@ -248,10 +132,7 @@ const FinalPortfolioComponent = () => {
                     <AnimatedSection>
                         <h2 className="text-3xl md:text-4xl font-extrabold mb-12 text-center"><span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-1-dark to-primary-2-dark">Proyek Unggulan</span></h2>
                         <div className="grid md:grid-cols-2 gap-8">
-                            {[
-                              {img: 'https://placehold.co/600x400/8B5CF6/FFFFFF?text=Tapstok', cat: 'P2MW Project', title: 'Tapstok: Sistem Manajemen Stok NFC', desc: 'Merancang dan memimpin pengembangan aplikasi manajemen stok berbasis NFC yang mengurangi error inventaris UMKM hingga 70%.', tags: ['NFC', 'Manajemen Stok', 'UMKM']},
-                              {img: 'https://placehold.co/600x400/EC4899/FFFFFF?text=Tiket+Bus', cat: 'Proyek Pribadi', title: 'Digitalisasi Tiket Perjalanan Bus', desc: 'Membangun MVP platform booking tiket untuk membantu bisnis transportasi kecil go-digital dan mengurangi operasi manual.', tags: ['HTML', 'CSS', 'JavaScript']}
-                            ].map((p, i) => (
+                            {projects.map((p, i) => (
                                <div key={i} className="bg-dark-bg-secondary border border-dark-border rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:shadow-primary-1-dark/10 hover:-translate-y-2">
                                   <div className="overflow-hidden"><img src={p.img} alt={p.title} className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" /></div>
                                   <div className="p-6">
@@ -310,10 +191,10 @@ const FinalPortfolioComponent = () => {
                             <div className="absolute left-0 md:left-1/2 top-0 h-full w-0.5 bg-dark-border"></div>
                             <div className="space-y-12">
                                 {experiences.map((exp, i) => (
-                                    <div key={i} className="relative pl-8 md:pl-0">
-                                        <div className="md:flex items-center">
-                                            <div className={`md:w-1/2 ${i % 2 === 0 ? 'md:pr-8' : 'md:pl-8 md:text-right'}`}>
-                                                <div className={`p-6 bg-dark-bg-secondary border border-dark-border rounded-lg ${i % 2 !== 0 ? 'md:float-right' : ''}`}>
+                                    <div key={i} className={`relative pl-8 md:pl-0 ${i % 2 !== 0 ? 'md:text-right' : ''}`}>
+                                        <div className={`md:flex ${i % 2 !== 0 ? 'md:flex-row-reverse' : ''} items-center`}>
+                                            <div className="md:w-1/2">
+                                                <div className={`p-6 bg-dark-bg-secondary border border-dark-border rounded-lg`}>
                                                     <p className="text-sm text-dark-font-secondary mb-1">{exp.date}</p>
                                                     <h3 className="text-xl font-bold">{exp.title}</h3>
                                                     <p className="text-primary-1-dark font-semibold mb-2">{exp.company}</p>
@@ -355,84 +236,4 @@ const FinalPortfolioComponent = () => {
   );
 };
 
-
-// --- Custom Cursor Component ---
-const CustomCursor = () => {
-    const position = useMousePosition();
-    const [isPointer, setIsPointer] = useState(false);
-
-    useEffect(() => {
-        const handleMouseOver = (e) => setIsPointer(!!e.target.closest('a, button'));
-        document.addEventListener('mouseover', handleMouseOver);
-        return () => document.removeEventListener('mouseover', handleMouseOver);
-    }, []);
-
-    return (
-        <div className="hidden md:block pointer-events-none fixed z-[9999] top-0 left-0">
-            <div
-                className="absolute rounded-full bg-primary-1-dark transition-transform duration-200"
-                style={{
-                    left: `${position.x}px`, top: `${position.y}px`,
-                    width: isPointer ? '0px' : '8px', height: isPointer ? '0px' : '8px',
-                    transform: 'translate(-50%, -50%)',
-                }}
-            />
-            <div
-                className="absolute rounded-full border-2 border-primary-1-dark/50 transition-all duration-300"
-                style={{
-                    left: `${position.x}px`, top: `${position.y}px`,
-                    width: isPointer ? '50px' : '40px', height: isPointer ? '50px' : '40px',
-                    transform: `translate(-50%, -50%) scale(${isPointer ? 1 : 1})`,
-                    backgroundColor: isPointer ? 'rgba(139, 92, 246, 0.2)' : 'transparent',
-                }}
-            />
-        </div>
-    );
-};
-
-
-// --- App Main Component ---
-function App() {
-  const { gameStatus, startGame, winGame } = useGameStore();
-  const [isPortfolioVisible, setIsPortfolioVisible] = useState(false);
-  const [isGameFading, setIsGameFading] = useState(false);
-  
-  useEffect(() => {
-    if (gameStatus === 'won' && !isGameFading) {
-      setIsGameFading(true);
-      setTimeout(() => {
-        setIsPortfolioVisible(true);
-      }, 500); // Wait for fade out
-    }
-  }, [gameStatus, isGameFading]);
-
-  useEffect(() => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css';
-    document.head.appendChild(link);
-  }, []);
-
-  const renderContent = () => {
-    if (gameStatus === 'start') {
-      return <StartScreen />;
-    }
-    if (isPortfolioVisible) {
-      return <FinalPortfolioComponent />;
-    }
-    return (
-       <div className={`transition-opacity duration-500 ${isGameFading ? 'opacity-0' : 'opacity-100'}`}>
-         <GameComponent />
-       </div>
-    );
-  };
-  
-  return (
-    <>
-      <CustomCursor />
-      {renderContent()}
-    </>
-  );
-}
-
-export default App;
+export default FinalPortfolio;

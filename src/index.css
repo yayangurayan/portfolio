@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 body {
-  cursor: none; /* Custom cursor will be handled by React component */
+  /* Custom cursor akan ditangani oleh komponen React */
+  cursor: none;
 }
 
-/* Hide default cursor for non-touch devices */
+/* Sembunyikan kursor default untuk perangkat non-sentuh */
 @media (pointer: fine) {
   html, body, button, a {
     cursor: none;
