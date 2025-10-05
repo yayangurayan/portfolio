@@ -1,55 +1,87 @@
 import React, { useState, useEffect } from 'react';
-import { useGameStore } from 'D:/WebProjects/Web Portfolio (Update)/wdd-gamified-portfolio/stores/useGameStore.js';
-import StartScreen from 'D:/WebProjects/Web Portfolio (Update)/wdd-gamified-portfolio/components/ui/StartScreen.jsx';
-import GameCanvas from 'D:/WebProjects/Web Portfolio (Update)/wdd-gamified-portfolio/components/game/GameCanvas.jsx';
-import FinalPortfolio from 'D:/WebProjects/Web Portfolio (Update)/wdd-gamified-portfolio/pages/FinalPortfolio.jsx';
-import CustomCursor from 'D:/WebProjects/Web Portfolio (Update)/wdd-gamified-portfolio/components/ui/CustomCursor.jsx';
+import { useGameStore } from './stores/useGameStore';
+import { sfx } from './sound/sfx';
+
+// Impor Komponen
+import StartScreen from './components/ui/StartScreen';
+import GameCanvas from './components/game/GameCanvas';
+import FinalPortfolio from './pages/FinalPortfolio';
+import CustomCursor from './components/ui/CustomCursor';
+import GameOverScreen from './components/ui/GameOverScreen';
+import ProjectPreviewCard from './components/ui/ProjectPreviewCard';
+
+// Komponen Mute Button
+const MuteButton = () => {
+    const { isMuted, toggleMute } = useGameStore();
+
+    const handleClick = () => {
+        // Audio context di browser harus dimulai oleh interaksi pengguna
+        // jadi kita panggil startAudio saat tombol pertama kali diklik
+        if (!sfx.isAudioReady) {
+            sfx.startAudio();
+        }
+        toggleMute();
+    }
+
+    return (
+        <button 
+            onClick={handleClick}
+            className="fixed bottom-4 right-4 z-[9999] w-12 h-12 bg-dark-bg-secondary/50 backdrop-blur-sm border border-dark-border rounded-full text-dark-font-secondary hover:text-white hover:border-primary-1-dark transition-all flex items-center justify-center"
+            aria-label={isMuted ? "Unmute" : "Mute"}
+        >
+            <i className={`fas ${isMuted ? 'fa-volume-xmark' : 'fa-volume-high'}`}></i>
+        </button>
+    )
+}
 
 function App() {
-  const { gameStatus } = useGameStore();
-  const [isPortfolioVisible, setIsPortfolioVisible] = useState(false);
-  const [isGameFading, setIsGameFading] = useState(false);
+  const { gameStatus, projectToShow, clearProjectPreview } = useGameStore();
+  const [isFadingOut, setIsFadingOut] = useState(false);
+  const [renderPortfolio, setRenderPortfolio] = useState(false);
   
+  // Logika untuk transisi dari game ke portofolio
   useEffect(() => {
-    // Logika transisi dari game ke portofolio
-    if (gameStatus === 'won' && !isGameFading) {
-      setIsGameFading(true);
+    if (gameStatus === 'won' && !isFadingOut) {
+      setIsFadingOut(true);
+      // Tunggu animasi fade-out selesai sebelum merender portofolio
       setTimeout(() => {
-        setIsPortfolioVisible(true);
-      }, 500); // Tunggu animasi fade-out selesai
+        setRenderPortfolio(true);
+      }, 500); 
     }
-  }, [gameStatus, isGameFading]);
-
-  // Muat Font Awesome secara dinamis
-  useEffect(() => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css';
-    document.head.appendChild(link);
-
-    return () => {
-      document.head.removeChild(link);
+    
+    // Reset state transisi jika game dimulai ulang
+    if (gameStatus === 'start' || gameStatus === 'playing') {
+        setIsFadingOut(false);
+        setRenderPortfolio(false);
     }
-  }, []);
+  }, [gameStatus, isFadingOut]);
 
+  // Render konten berdasarkan status game
   const renderContent = () => {
-    if (gameStatus === 'start') {
-      return <StartScreen />;
+    if (renderPortfolio) {
+        return <FinalPortfolio />;
     }
-    if (isPortfolioVisible) {
-      return <FinalPortfolio />;
-    }
-    // Tampilkan game dan atur transisi fade-out
+
+    const contentMap = {
+        start: <StartScreen />,
+        playing: <GameCanvas />,
+        gameOver: <GameOverScreen />,
+    };
+
+    const content = contentMap[gameStatus] || <StartScreen />;
+
     return (
-       <div className={`transition-opacity duration-500 ${isGameFading ? 'opacity-0' : 'opacity-100'}`}>
-         <GameCanvas />
-       </div>
-    );
+        <div className={isFadingOut ? 'animate-fade-out' : 'animate-fade-in'}>
+            {content}
+        </div>
+    )
   };
   
   return (
     <>
       <CustomCursor />
+      <MuteButton />
+      {projectToShow && <ProjectPreviewCard project={projectToShow} onClose={clearProjectPreview} />}
       {renderContent()}
     </>
   );

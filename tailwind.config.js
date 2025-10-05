@@ -7,29 +7,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Dark Theme Colors from style.css
         'dark-bg': '#0d1117',
         'dark-bg-secondary': '#161b22',
         'dark-font': '#E5E7EB',
         'dark-font-secondary': '#8d96a0',
         'dark-border': '#30363d',
-
-        // Light Theme Colors from style.css
-        'light-bg': '#ffffff',
-        'light-bg-secondary': '#f9fafb',
-        'light-font': '#111827',
-        'light-font-secondary': '#4B5563',
-        'light-border': '#e5e7eb',
-
-        // Primary Gradient Colors
-        'primary-1': {
-          light: '#7C3AED',
-          dark: '#8B5CF6',
-        },
-        'primary-2': {
-          light: '#D946EF',
-          dark: '#EC4899',
-        },
+        'primary-1-dark': '#8B5CF6',
+        'primary-2-dark': '#EC4899',
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
@@ -38,13 +22,19 @@ export default {
         spin: {
           'to': { transform: 'rotate(360deg)' },
         },
-        blink: {
-          '50%': { 'border-color': 'transparent' },
-        }
+        fadeIn: {
+          'from': { opacity: 0 },
+          'to': { opacity: 1 },
+        },
+        fadeOut: {
+          'from': { opacity: 1 },
+          'to': { opacity: 0 },
+        },
       },
       animation: {
         spin: 'spin 4s linear infinite',
-        blink: 'blink 0.7s infinite',
+        'fade-in': 'fadeIn 0.5s ease-in-out forwards',
+        'fade-out': 'fadeOut 0.5s ease-in-out forwards',
       },
     },
   },

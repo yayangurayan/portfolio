@@ -1,16 +1,16 @@
 import React from 'react';
-import { useGameStore } from 'D:/WebProjects/Web Portfolio (Update)/wdd-gamified-portfolio/stores/useGameStore.js';
+import { useGameStore } from '../../stores/useGameStore';
 
 const GameOverScreen = () => {
   const { startGame, restartGame } = useGameStore();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-dark-bg text-dark-font font-inter p-4 text-center">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-dark-bg text-dark-font font-inter p-4 text-center animate-fade-in">
       <h1 className="text-4xl md:text-6xl font-extrabold mb-2 text-red-500">
         Game Over
       </h1>
       <p className="text-lg text-dark-font-secondary mb-8 max-w-2xl">
-        Anda menabrak bug! Dalam pengembangan, setiap kesalahan adalah pelajaran.
+        Anda menabrak bug! Dalam pengembangan, setiap kesalahan adalah pelajaran berharga.
       </p>
       <div className="flex gap-4">
         <button

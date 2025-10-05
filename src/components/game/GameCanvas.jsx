@@ -1,141 +1,149 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Stage, Layer, Rect, Text, Circle } from 'react-konva';
-import { useGameStore } from '/src/store/useGameStore.js';
-import { level1 } from '/src/data/gameContent.js';
-import { useEventListener } from '/src/hooks/useEventListener.js';
+import { useGameStore } from '../../stores/useGameStore';
+import { gameContent } from '../../data/gameContent';
+import { useEventListener } from '../../hooks/useEventListener';
+import { useGameLoop } from '../../hooks/useGameLoop';
+import { sfx } from '../../sound/sfx';
+import ParallaxBackground from './ParallaxBackground';
 
-// --- Konstanta & Komponen ---
-const PLAYER_SIZE = { width: 40, height: 60 };
-const PLAYER_SPEED = 5;
-const GRAVITY = 0.6;
-const JUMP_FORCE = -14;
-const PLAYER_INITIAL_POS = { x: 50, y: 300 };
-
-// Komponen Visual
-const Player = ({ x, y }) => ( <Rect x={x} y={y} width={PLAYER_SIZE.width} height={PLAYER_SIZE.height} fillLinearGradientStartPoint={{ x: 0, y: 0 }} fillLinearGradientEndPoint={{ x: PLAYER_SIZE.width, y: PLAYER_SIZE.height }} fillLinearGradientColorStops={[0, '#8B5CF6', 1, '#EC4899']} cornerRadius={5} shadowBlur={10} shadowColor="#8B5CF6" /> );
+// Komponen Visual untuk elemen game
+const Player = ({ x, y, size }) => ( <Rect x={x} y={y} width={size.width} height={size.height} fillLinearGradientStartPoint={{ x: 0, y: 0 }} fillLinearGradientEndPoint={{ x: size.width, y: size.height }} fillLinearGradientColorStops={[0, '#8B5CF6', 1, '#EC4899']} cornerRadius={5} shadowBlur={10} shadowColor="#8B5CF6" /> );
 const Platform = ({ x, y, width, height }) => ( <Rect x={x} y={y} width={width} height={height} fill="#30363d" cornerRadius={3} /> );
 const SkillItem = ({ x, y, name }) => ( <Text text={name} x={x} y={y} fontSize={20} fill="#FBBF24" fontFamily="Inter, sans-serif" shadowColor="black" shadowBlur={5} shadowOpacity={0.5} /> );
 const Goal = ({ x, y, width, height }) => ( <Rect x={x} y={y} width={width} height={height} fillLinearGradientStartPoint={{ x: 0, y: 0 }} fillLinearGradientEndPoint={{ x: width, y: height }} fillLinearGradientColorStops={[0, '#10B981', 1, '#F59E0B']} cornerRadius={5} shadowBlur={15} shadowColor="#10B981" /> );
 const Bug = ({ x, y, width, height }) => ( <Rect x={x} y={y} width={width} height={height} fill="#EF4444" cornerRadius={15} shadowBlur={5} shadowColor="#EF4444"/> );
 
 const GameCanvas = () => {
-    const { winGame, collectSkill, collectedSkills, showProjectPreview } = useGameStore();
+    const { winGame, gameOver, collectSkill, collectedSkills, showProjectPreview } = useGameStore();
     
-    // State permainan
-    const [player, setPlayer] = useState({ ...PLAYER_INITIAL_POS, vx: 0, vy: 0, onGround: false });
-    const [skillsOnLevel, setSkillsOnLevel] = useState(level1.skills);
-    const [bugs, setBugs] = useState(level1.bugs);
-    const [particles, setParticles] = useState([]);
-    const [hitEffect, setHitEffect] = useState(0); // Untuk opacity layar merah saat terkena bug
-    const keys = useRef({ a: false, d: false, w: false });
+    // --- State & Ref untuk Game ---
     const containerRef = useRef(null);
     const [dimensions, setDimensions] = useState({ width: 800, height: 500 });
-    const [isGoalReached, setIsGoalReached] = useState(false);
-
-    const createExplosion = (x, y, color = "#FBBF24") => {
-        const newParticles = Array.from({ length: 20 }).map(() => ({
-            x, y,
-            vx: (Math.random() - 0.5) * 5,
-            vy: (Math.random() - 0.5) * 5,
-            radius: Math.random() * 3 + 1,
-            life: 30, opacity: 1, color
-        }));
-        setParticles(current => [...current, ...newParticles]);
-    };
-
-    const handleKeyDown = useCallback((e) => {
-        if (e.key === 'a' || e.key === 'A') keys.current.a = true;
-        if (e.key === 'd' || e.key === 'D') keys.current.d = true;
-        if ((e.key === 'w' || e.key === 'W' || e.key === ' ') && player.onGround) keys.current.w = true;
-    }, [player.onGround]);
+    const keys = useRef({ a: false, d: false, w: false });
     
-    const handleKeyUp = useCallback((e) => {
-        if (e.key === 'a' || e.key === 'A') keys.current.a = false;
-        if (e.key === 'd' || e.key === 'D') keys.current.d = false;
-        if (e.key === 'w' || e.key === 'W' || e.key === ' ') keys.current.w = false;
+    // --- State Entitas Game ---
+    const [player, setPlayer] = useState({ x: 50, y: 300, vx: 0, vy: 0, onGround: false });
+    const [skillsOnLevel, setSkillsOnLevel] = useState(gameContent.skills);
+    const [bugs, setBugs] = useState(gameContent.bugs);
+    const [particles, setParticles] = useState([]);
+    const [cameraX, setCameraX] = useState(0);
+    const isGameOver = useRef(false);
+
+    // --- Konstanta Fisika & Game ---
+    const PLAYER_SIZE = { width: 40, height: 60 };
+    const PLAYER_SPEED = 300; // piksel per detik
+    const GRAVITY = 2000;     // piksel per detik^2
+    const JUMP_FORCE = -800;  // kecepatan vertikal awal saat melompat
+
+    // --- Fungsi Helper ---
+    const checkCollision = (r1, r2) => (r1.x < r2.x + r2.width && r1.x + r1.width > r2.x && r1.y < r2.y + r2.height && r1.y + r1.height > r2.y);
+    const createParticles = useCallback((x, y, color = "#FBBF24", count = 20) => {
+        setParticles(current => [...current, ...Array.from({ length: count }, () => ({ id: Math.random(), x, y, color, vx: (Math.random()-0.5)*300, vy: (Math.random()-0.5)*300, life: 0.5, opacity: 1, radius: Math.random()*3+1 }))]);
     }, []);
 
+    // --- Input Handling ---
+    const handleKeyDown = useCallback((e) => {
+        const key = e.key.toLowerCase();
+        if (key === 'a') keys.current.a = true;
+        if (key === 'd') keys.current.d = true;
+        if ((key === 'w' || key === ' ') && player.onGround) { e.preventDefault(); keys.current.w = true; }
+    }, [player.onGround]);
+    const handleKeyUp = useCallback((e) => {
+        const key = e.key.toLowerCase();
+        if (key === 'a') keys.current.a = false;
+        if (key === 'd') keys.current.d = false;
+        if (key === 'w' || key === ' ') keys.current.w = false;
+    }, []);
     useEventListener('keydown', handleKeyDown);
     useEventListener('keyup', handleKeyUp);
 
-    // Game Loop Utama
-    useEffect(() => {
-        let animationFrameId;
-        const gameLoop = () => {
-            if (isGoalReached) return;
+    // --- Game Loop Utama ---
+    useGameLoop(useCallback((deltaTime) => {
+        if (isGameOver.current) return;
+        const dt = deltaTime / 1000;
 
-            // Update posisi player (logika tidak berubah)
-            setPlayer(p => { /* ... */ return p; });
-            
-            // Update posisi bug
-            setBugs(currentBugs => currentBugs.map(bug => {
-                let newX = bug.x + bug.vx;
-                let newVx = bug.vx;
-                // Pantulkan bug jika menyentuh batas platform tempat ia berada
-                level1.platforms.forEach(p => {
-                    if (bug.y > p.y - bug.height && bug.y < p.y + p.height) { // Cek apakah bug berada di level y platform
-                        if (newX < p.x || newX + bug.width > p.x + p.width) {
-                            newVx = -bug.vx;
-                            newX = bug.x + newVx;
-                        }
-                    }
-                });
-                return { ...bug, x: newX, vx: newVx };
-            }));
+        // 1. Update Player
+        setPlayer(p => {
+            let { x, y, vx, vy, onGround } = { ...p };
+            vx = keys.current.a ? -PLAYER_SPEED : (keys.current.d ? PLAYER_SPEED : 0);
+            if (keys.current.w && onGround) { vy = JUMP_FORCE; onGround = false; keys.current.w = false; sfx.playJump(); }
+            vy += GRAVITY * dt;
 
-            // Deteksi kolisi skill (logika tidak berubah)
-            setSkillsOnLevel(prevSkills => { /* ... */ return prevSkills; });
-            
-            // Deteksi kolisi bug
-            bugs.forEach(bug => {
-                const isColliding = player.x < bug.x + bug.width && player.x + PLAYER_SIZE.width > bug.x && player.y < bug.y + bug.height && player.y + PLAYER_SIZE.height > bug.y;
-                if(isColliding) {
-                    setPlayer(p => ({ ...p, ...PLAYER_INITIAL_POS, vy: 0 })); // Reset posisi
-                    createExplosion(player.x + PLAYER_SIZE.width / 2, player.y + PLAYER_SIZE.height / 2, "#EF4444");
-                    setHitEffect(1); // Tampilkan layar merah
-                }
-            });
+            let nextX = x + vx * dt, nextY = y + vy * dt;
+            let newOnGround = false;
 
-            // Update partikel (logika tidak berubah)
-            setParticles(prevParticles => { /* ... */ return prevParticles; });
-
-            // Redupkan efek layar merah
-            setHitEffect(val => Math.max(0, val - 0.05));
-
-            // Cek kondisi kemenangan
-            if (collectedSkills.length === level1.skills.length) {
-                const goal = level1.goal;
-                if (player.x < goal.x + goal.width && player.x + PLAYER_SIZE.width > goal.x && player.y < goal.y + goal.height && player.y + PLAYER_SIZE.height > goal.y) {
-                    setIsGoalReached(true);
-                    showProjectPreview("Tapstok");
-                    setTimeout(winGame, 4500);
+            for (const plat of gameContent.platforms) {
+                if (checkCollision({ x: nextX, y: nextY, ...PLAYER_SIZE }, plat)) {
+                    if (vy > 0 && y + PLAYER_SIZE.height <= plat.y) { nextY = plat.y - PLAYER_SIZE.height; vy = 0; newOnGround = true; }
+                    else if (vy < 0 && y >= plat.y + plat.height) { nextY = plat.y + plat.height; vy = 0; }
+                    else if (vx > 0 && x + PLAYER_SIZE.width <= plat.x) { nextX = plat.x - PLAYER_SIZE.width; }
+                    else if (vx < 0 && x >= plat.x + plat.width) { nextX = plat.x + plat.width; }
                 }
             }
+            if (nextY > dimensions.height) { isGameOver.current = true; sfx.playHit(); gameOver(); }
+            return { x: nextX, y: nextY, vx, vy, onGround: newOnGround };
+        });
 
-            animationFrameId = requestAnimationFrame(gameLoop);
-        };
-        animationFrameId = requestAnimationFrame(gameLoop);
-        return () => cancelAnimationFrame(animationFrameId);
-    }, [player, bugs, collectedSkills, showProjectPreview, winGame, isGoalReached]);
+        // 2. Update Bugs & Cek Tabrakan
+        setBugs(current => current.map(bug => {
+            let newVx = bug.vx;
+            if (bug.x < bug.originalX || bug.x > bug.originalX + bug.range) newVx = -bug.vx;
+            if (checkCollision(player, bug)) { isGameOver.current = true; createParticles(player.x, player.y, "#EF4444"); sfx.playHit(); gameOver(); }
+            return { ...bug, x: bug.x + newVx * dt * (Math.abs(newVx)/1.5), vx: newVx };
+        }));
 
-    useEffect(() => { /* ... logika resize tidak berubah ... */ }, []);
+        // 3. Cek Tabrakan Skill
+        setSkillsOnLevel(current => current.filter(skill => {
+            if (checkCollision(player, { ...skill, width: 60, height: 30 })) { collectSkill(skill.name); createParticles(skill.x, skill.y); sfx.playCollect(); return false; }
+            return true;
+        }));
+
+        // 4. Update Partikel
+        setParticles(current => current.map(p => ({ ...p, x: p.x + p.vx * dt, y: p.y + p.vy * dt, life: p.life - dt, opacity: p.life / 0.5 })).filter(p => p.life > 0));
+
+        // 5. Cek Kondisi Kemenangan
+        if (collectedSkills.length === gameContent.skills.length && checkCollision(player, gameContent.goal)) {
+            isGameOver.current = true; sfx.playWin(); showProjectPreview("Tapstok"); setTimeout(winGame, 4000);
+        }
+
+        // 6. Update Kamera
+        setCameraX(prevX => prevX + (player.x - dimensions.width / 3 - prevX) * 0.1);
+
+    }, [player, collectedSkills.length, dimensions.height]));
+
+    // Efek untuk menyesuaikan ukuran canvas
+    useEffect(() => {
+        const updateSize = () => containerRef.current && setDimensions({ width: containerRef.current.offsetWidth, height: containerRef.current.offsetHeight });
+        updateSize();
+        window.addEventListener('resize', updateSize);
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
 
     return (
-        <div className="relative flex flex-col items-center justify-center min-h-screen bg-dark-bg text-dark-font font-inter p-4">
-            <div className="absolute top-4 left-4 ..."> {/* UI Skill (tidak berubah) */} </div>
-            <div className="text-center mb-4"> {/* UI Judul (tidak berubah) */} </div>
-            
-            <div ref={containerRef} className="w-full max-w-4xl bg-dark-bg-secondary border border-dark-border rounded-lg shadow-lg overflow-hidden">
+        <div className="relative flex flex-col items-center justify-center min-h-screen bg-dark-bg text-dark-font p-4">
+            <div className="absolute top-4 left-4 z-10 bg-dark-bg-secondary/50 backdrop-blur-sm p-3 rounded-lg border border-dark-border">
+                <h3 className="font-bold text-sm mb-2">Skills Terkumpul:</h3>
+                <div className="flex gap-2 flex-wrap">
+                    {gameContent.skills.map(skill => (
+                        <span key={skill.name} className={`px-2 py-1 text-xs rounded-full transition-all duration-300 ${collectedSkills.includes(skill.name) ? 'bg-primary-1-dark text-white' : 'bg-dark-bg text-dark-font-secondary'}`}>{skill.name}</span>
+                    ))}
+                </div>
+            </div>
+            <div className="text-center mb-4">
+                <h2 className="text-2xl font-bold">The Developer's Odyssey</h2>
+                <p className="text-dark-font-secondary text-sm">Gunakan A/D untuk bergerak, W atau Spasi untuk melompat.</p>
+            </div>
+            <div ref={containerRef} className="w-full max-w-5xl h-[60vh] bg-dark-bg-secondary border border-dark-border rounded-lg shadow-2xl shadow-primary-2-dark/10 overflow-hidden">
                 <Stage width={dimensions.width} height={dimensions.height}>
-                    <Layer>
-                        {level1.platforms.map((p, i) => <Platform key={`p-${i}`} {...p} />)}
+                    <Layer x={-cameraX}>
+                        <ParallaxBackground cameraX={cameraX} canvasWidth={dimensions.width} canvasHeight={dimensions.height} />
+                        {gameContent.platforms.map((p, i) => <Platform key={`p-${i}`} {...p} />)}
                         {skillsOnLevel.map((s, i) => <SkillItem key={`s-${i}`} {...s} />)}
                         {bugs.map((b, i) => <Bug key={`b-${i}`} {...b} />)}
-                        {particles.map((p, i) => <Circle key={`part-${i}`} x={p.x} y={p.y} radius={p.radius} fill={p.color} opacity={p.opacity} />)}
-                        {collectedSkills.length === level1.skills.length && <Goal {...level1.goal} />}
-                        <Player x={player.x} y={player.y} />
-                        {/* Layer efek terkena bug */}
-                        <Rect x={0} y={0} width={dimensions.width} height={dimensions.height} fill="rgba(239, 68, 68, 0.5)" opacity={hitEffect} />
+                        {particles.map(p => <Circle key={p.id} x={p.x} y={p.y} radius={p.radius} fill={p.color} opacity={p.opacity} />)}
+                        {collectedSkills.length === gameContent.skills.length && <Goal {...gameContent.goal} />}
+                        <Player x={player.x} y={player.y} size={PLAYER_SIZE} />
                     </Layer>
                 </Stage>
             </div>

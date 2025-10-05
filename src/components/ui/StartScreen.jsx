@@ -1,15 +1,16 @@
 import React from 'react';
-import { useGameStore } from '../../store/useGameStore.js';
+import { useGameStore } from '../../stores/useGameStore';
 
 const StartScreen = () => {
   const startGame = useGameStore((state) => state.startGame);
+  
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-dark-bg text-dark-font font-inter p-4 text-center">
-      <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center animate-fade-in">
+      <h1 className="text-4xl md:text-6xl font-extrabold mb-4 text-dark-font">
         The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-1-dark to-primary-2-dark">Developer's Odyssey</span>
       </h1>
       <p className="text-lg text-dark-font-secondary mb-8 max-w-2xl">
-        Sebuah perjalanan interaktif melalui karier seorang developer. Kumpulkan item, atasi rintangan, dan buka portofolio di akhir perjalanan.
+        Sebuah perjalanan interaktif melalui karier seorang developer. Kumpulkan skill, atasi bug, dan buka portofolio di akhir perjalanan.
       </p>
       <button
         onClick={startGame}
