@@ -127,17 +127,18 @@ const solution = computed(() => project.value?.[`solution_${lang.value}`])
 
 <!-- Styling untuk konten studi kasus (WDD 3.1) -->
 <style>
+/* PERBAIKAN: Menghapus .DEFAULT dan menggunakan sintaks opacity yang benar */
 .prose {
-  color: theme('colors.text-main.DEFAULT');
+  color: theme('colors.text-main');
 }
 .prose h2 {
-  color: theme('colors.text-main.DEFAULT');
+  color: theme('colors.text-main');
   font-weight: 600;
   margin-bottom: 0.5em;
   margin-top: 1.5em;
 }
 .prose p {
-  color: theme('colors.text-main.70');
+  color: theme('colors.text-main / 0.7');
   line-height: 1.7;
 }
 </style>

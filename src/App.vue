@@ -1,13 +1,13 @@
 <script setup>
 import { RouterLink, RouterView, useRoute } from 'vue-router'
-// import { useMouse } from '@vueuse/core' // Dihapus
-import { computed, ref, watchEffect } from 'vue' // Tambahkan watchEffect
+// import { useMouse } from '@vueuse/core' // PERBAIKAN: Dihapus
+import { computed, ref, watchEffect } from 'vue' // PERBAIKAN: Tambahkan ref & watchEffect
 import ThemeToggle from './components/ThemeToggle.vue'
-import MobileMenu from './components/MobileMenu.vue'
+import MobileMenu from './components/MobileMenu.vue' // PERBAIKAN: Import MobileMenu
 import LanguageToggle from './components/LanguageToggle.vue'
-import { useLang } from './composable/useLang' // PERBAIKAN: Path
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
 
-// --- Menghapus Kursor Kustom ---
+// --- PERBAIKAN: Menghapus Kursor Kustom ---
 // const { x, y } = useMouse() // Dihapus
 // const cursorStyle = computed(...) // Dihapus
 
@@ -29,13 +29,12 @@ const navLinksData = {
     { name: 'Contact', path: '/contact' },
   ],
 }
-// Link Navigasi dari WDD 4.2 (sekarang dinamis)
 const navLinks = computed(() => navLinksData[lang.value])
 
-// --- State untuk Mobile Menu (WDD 4.2) ---
+// --- PERBAIKAN: State untuk Mobile Menu (WDD 4.2) ---
 const mobileMenuOpen = ref(false)
 
-// --- Page Transitions (WDD 3.2) ---
+// --- PERBAIKAN: Page Transitions (WDD 3.2) ---
 const route = useRoute()
 
 // PERBAIKAN: Tutup menu mobile jika navigasi terjadi (mis. tombol back browser)
@@ -87,7 +86,7 @@ watchEffect(() => {
           <ThemeToggle />
         </div>
 
-        <!-- Menu Mobile (Hamburger) - Sekarang Fungsional -->
+        <!-- PERBAIKAN: Menu Mobile (Hamburger) - Sekarang Fungsional -->
         <div class="flex lg:hidden">
           <LanguageToggle class="mr-2" />
           <ThemeToggle class="mr-2" />
@@ -119,7 +118,7 @@ watchEffect(() => {
 
     <!-- Konten Halaman Utama -->
     <main class="flex-1">
-      <!-- WDD 3.2: Page Transitions -->
+      <!-- PERBAIKAN: WDD 3.2: Page Transitions -->
       <RouterView v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
           <component :is="Component" :key="route.path" />

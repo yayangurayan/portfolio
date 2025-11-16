@@ -199,9 +199,9 @@ const languages = computed(() => languagesData[lang.value])
             {{ t.langTitle }}
           </h3>
           <div class="flex justify-center gap-8">
-            <div v-for="lang in languages" :key="lang.name" class="text-center">
-              <p class="font-poppins text-lg text-text-main">{{ lang.name }}</p>
-              <span class="font-mono text-sm text-secondary">{{ lang.level }}</span>
+            <div v-for="langItem in languages" :key="langItem.name" class="text-center">
+              <p class="font-poppins text-lg text-text-main">{{ langItem.name }}</p>
+              <span class="font-mono text-sm text-secondary">{{ langItem.level }}</span>
             </div>
           </div>
         </div>

@@ -77,7 +77,7 @@ const t = computed(() => {
     labelName: lang.value === 'id' ? 'Nama Lengkap' : 'Full Name',
     labelEmail: lang.value === 'id' ? 'Email' : 'Email',
     labelMessage: lang.value === 'id' ? 'Pesan' : 'Message',
-    btnSend: lang.value === 'id' ? 'Kirim Pesan' : 'Kirim Pesan',
+    btnSend: lang.value === 'id' ? 'Kirim Pesan' : 'Send Message',
   }
 })
 </script>
