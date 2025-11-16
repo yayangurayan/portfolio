@@ -1,13 +1,22 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import BaseButton from '@/components/BaseButton.vue'
+import { computed } from 'vue'
+import { useLang } from '@/composables/useLang'
 
-defineProps({
+const props = defineProps({
   project: {
     type: Object,
     required: true,
   },
 })
+
+const { lang } = useLang()
+
+// Teks dinamis berdasarkan bahasa
+const title = computed(() => props.project[`title_${lang.value}`])
+const description = computed(() => props.project[`description_${lang.value}`])
+const ctaText = computed(() => (lang.value === 'id' ? 'Lihat Studi Kasus' : 'View Case Study'))
 </script>
 
 <template>
@@ -40,12 +49,12 @@ defineProps({
         <RouterLink :to="`/projects/${project.id}`" class="focus:outline-none">
           <!-- Overlay link untuk seluruh kartu -->
           <span class="absolute inset-0" aria-hidden="true"></span>
-          {{ project.title }}
+          {{ title }}
         </RouterLink>
       </h3>
       <!-- Deskripsi Singkat -->
       <p class="mt-3 line-clamp-3 flex-1 text-sm text-text-main/70">
-        {{ project.description }}
+        {{ description }}
       </p>
 
       <!-- Tombol "Baca Lebih" (Muncul di atas overlay) -->
@@ -53,7 +62,7 @@ defineProps({
         <span
           class="relative z-10 font-poppins text-sm font-semibold text-secondary transition-all group-hover:text-secondary/80"
         >
-          Lihat Studi Kasus &rarr;
+          {{ ctaText }} &rarr;
         </span>
       </div>
     </div>

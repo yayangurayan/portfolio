@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import ThemeToggle from './ThemeToggle.vue'
+import LanguageToggle from './LanguageToggle.vue' // Import
 
 defineProps({
   open: {
@@ -67,9 +68,13 @@ const emit = defineEmits(['close'])
               {{ link.name }}
             </RouterLink>
           </div>
-          <div class="py-6">
+          <div class="flex items-center gap-x-4 py-6">
             <ThemeToggle />
-            <span class="ml-4 font-mono text-sm text-text-main/50">Ganti Tema</span>
+            <span class="font-mono text-sm text-text-main/50">Ganti Tema</span>
+          </div>
+          <div class="flex items-center gap-x-4 py-6">
+            <LanguageToggle />
+            <span class="font-mono text-sm text-text-main/50">Ganti Bahasa</span>
           </div>
         </div>
       </div>

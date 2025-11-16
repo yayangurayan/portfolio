@@ -1,21 +1,36 @@
 <script setup>
 import { RouterLink, RouterView, useRoute } from 'vue-router'
-import { ref, watch } from 'vue'
+// import { useMouse } from '@vueuse/core' // Dihapus
+import { computed, ref } from 'vue'
 import ThemeToggle from './components/ThemeToggle.vue'
 import MobileMenu from './components/MobileMenu.vue'
+import LanguageToggle from './components/LanguageToggle.vue' // Import
+import { useLang } from './composables/useLang' // Import
 
 // --- Menghapus Kursor Kustom ---
 // const { x, y } = useMouse() // Dihapus
 // const cursorStyle = computed(...) // Dihapus
 
-// Link Navigasi dari WDD 4.2
-const navLinks = [
-  { name: 'Beranda', path: '/' },
-  { name: 'Tentang', path: '/about' },
-  { name: 'Latar Belakang', path: '/background' },
-  { name: 'Proyek', path: '/projects' },
-  { name: 'Kontak', path: '/contact' },
-]
+// --- Internasionalisasi (i18n) untuk Navigasi ---
+const { lang } = useLang()
+const navLinksData = {
+  id: [
+    { name: 'Beranda', path: '/' },
+    { name: 'Tentang', path: '/about' },
+    { name: 'Latar Belakang', path: '/background' },
+    { name: 'Proyek', path: '/projects' },
+    { name: 'Kontak', path: '/contact' },
+  ],
+  en: [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+    { name: 'Background', path: '/background' },
+    { name: 'Projects', path: '/projects' },
+    { name: 'Contact', path: '/contact' },
+  ],
+}
+// Link Navigasi dari WDD 4.2 (sekarang dinamis)
+const navLinks = computed(() => navLinksData[lang.value])
 
 // --- State untuk Mobile Menu (WDD 4.2) ---
 const mobileMenuOpen = ref(false)
@@ -60,12 +75,8 @@ const route = useRoute()
 
         <!-- Kanan: Fitur Lainnya (WDD 4.2) -->
         <div class="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
-          <!-- Placeholder untuk Toggle Bahasa -->
-          <button
-            class="flex h-8 w-8 items-center justify-center rounded-full border border-text-main/20 text-sm font-medium text-text-main/70"
-          >
-            ID
-          </button>
+          <!-- Toggle Bahasa (WDD 3.2) -->
+          <LanguageToggle />
           <!-- Toggle Dark Mode (WDD 3.2) -->
           <ThemeToggle />
         </div>

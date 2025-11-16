@@ -3,7 +3,9 @@ import { computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { projects } from '@/data/projects.js'
 import BaseButton from '@/components/BaseButton.vue'
+import { useLang } from '@/composables/useLang' // Import
 
+const { lang } = useLang() // Gunakan
 const route = useRoute()
 const projectId = route.params.id
 
@@ -12,6 +14,28 @@ const projectId = route.params.id
 const project = computed(() => {
   return projects.find((p) => p.id === projectId)
 })
+
+// Teks dinamis
+const t = computed(() => {
+  return {
+    back: lang.value === 'id' ? 'Kembali ke Proyek' : 'Back to Projects',
+    desc: lang.value === 'id' ? 'Deskripsi Proyek' : 'Project Description',
+    problem: lang.value === 'id' ? 'Masalah yang Dihadapi' : 'Problem Faced',
+    solution: lang.value === 'id' ? 'Solusi yang Diterapkan' : 'Solution Implemented',
+    demo: lang.value === 'id' ? 'Lihat Live Demo' : 'View Live Demo',
+    repo: lang.value === 'id' ? 'Repositori Kode' : 'Code Repository',
+    errTitle: lang.value === 'id' ? 'Proyek tidak ditemukan' : 'Project not found',
+    errDesc: lang.value === 'id' ? 'Sepertinya proyek yang kamu cari tidak ada.' : 'It seems the project you are looking for does not exist.',
+    errBtn: lang.value === 'id' ? 'Lihat Proyek Lain' : 'View Other Projects',
+  }
+})
+
+// Properti proyek yang dinamis
+const title = computed(() => project.value?.[`title_${lang.value}`])
+const subtitle = computed(() => project.value?.[`subtitle_${lang.value}`])
+const description = computed(() => project.value?.[`description_${lang.value}`])
+const problem = computed(() => project.value?.[`problem_${lang.value}`])
+const solution = computed(() => project.value?.[`solution_${lang.value}`])
 </script>
 
 <template>
@@ -31,13 +55,13 @@ const project = computed(() => {
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
         </svg>
-        Kembali ke Proyek
+        {{ t.back }}
       </RouterLink>
 
       <!-- Header Proyek -->
-      <span class="font-mono text-sm uppercase text-primary">{{ project.subtitle }}</span>
+      <span class="font-mono text-sm uppercase text-primary">{{ subtitle }}</span>
       <h1 class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl">
-        {{ project.title }}
+        {{ title }}
       </h1>
 
       <!-- Tags -->
@@ -54,29 +78,29 @@ const project = computed(() => {
       <!-- Gambar Utama -->
       <img
         :src="project.imageUrl.replace('600x400', '1200x600')"
-        :alt="project.title"
+        :alt="title"
         class="my-12 w-full rounded-lg border border-text-main/10 object-cover shadow-lg"
       />
 
       <!-- WDD 3.1: Studi Kasus Mendalam -->
       <div class="prose prose-invert max-w-none prose-h2:font-poppins prose-p:font-sans">
-        <h2>Deskripsi Proyek</h2>
-        <p>{{ project.description }}</p>
+        <h2>{{ t.desc }}</h2>
+        <p>{{ description }}</p>
 
-        <h2>Masalah yang Dihadapi</h2>
-        <p>{{ project.problem }}</p>
+        <h2>{{ t.problem }}</h2>
+        <p>{{ problem }}</p>
 
-        <h2>Solusi yang Diterapkan</h2>
-        <p>{{ project.solution }}</p>
+        <h2>{{ t.solution }}</h2>
+        <p>{{ solution }}</p>
       </div>
 
       <!-- WDD 3.1: Link ke Live Demo & Repositori -->
       <div class="mt-12 flex items-center gap-x-6 border-t border-text-main/10 pt-8">
         <BaseButton :href="project.links.demo" target="_blank" variant="primary">
-          Lihat Live Demo
+          {{ t.demo }}
         </BaseButton>
         <BaseButton :href="project.links.repo" target="_blank" variant="outline">
-          Repositori Kode
+          {{ t.repo }}
         </BaseButton>
       </div>
     </div>
@@ -85,13 +109,13 @@ const project = computed(() => {
     <div v-else class="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 lg:px-8">
       <h1 class="font-poppins text-4xl font-bold text-secondary">404</h1>
       <h2 class="mt-4 font-poppins text-2xl font-semibold text-text-main">
-        Proyek tidak ditemukan
+        {{ t.errTitle }}
       </h2>
       <p class="mt-4 text-text-main/70">
-        Sepertinya proyek yang kamu cari tidak ada.
+        {{ t.errDesc }}
       </p>
       <BaseButton to="/projects" variant="primary" class="mt-8">
-        Lihat Proyek Lain
+        {{ t.errBtn }}
       </BaseButton>
     </div>
   </main>
