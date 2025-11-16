@@ -1,5 +1,5 @@
 <script setup>
-import { useLang } from '@/composables/useLang'
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
 import { computed } from 'vue'
 
 const { lang } = useLang()

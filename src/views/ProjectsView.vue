@@ -2,6 +2,9 @@
 import { ref, computed } from 'vue'
 import { projects } from '@/data/projects.js'
 import ProjectCard from '@/components/ProjectCard.vue'
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
+
+const { lang } = useLang()
 
 // Kumpulkan semua tag unik untuk filter
 const allTags = [...new Set(projects.flatMap((p) => p.tags))]
@@ -19,6 +22,22 @@ const filteredProjects = computed(() => {
 function setFilter(tag) {
   activeFilter.value = tag
 }
+
+// Teks dinamis
+const t = computed(() => {
+  return {
+    span: lang.value === 'id' ? 'Portofolio Saya' : 'My Portfolio',
+    title: lang.value === 'id' ? 'Galeri Proyek' : 'Project Gallery',
+    desc:
+      lang.value === 'id'
+        ? 'Kumpulan studi kasus, eksperimen, dan solusi yang telah saya bangun.'
+        : 'A collection of case studies, experiments, and solutions I have built.',
+    empty:
+      lang.value === 'id'
+        ? 'Tidak ada proyek yang ditemukan dengan tag'
+        : 'No projects found with tag',
+  }
+})
 </script>
 
 <template>
@@ -26,12 +45,14 @@ function setFilter(tag) {
     <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
       <!-- Judul Halaman -->
       <div class="mb-16 max-w-3xl">
-        <span class="font-mono text-sm uppercase text-primary">Portofolio Saya</span>
-        <h1 class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl">
-          Galeri Proyek
+        <span class="font-mono text-sm uppercase text-primary">{{ t.span }}</span>
+        <h1
+          class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl"
+        >
+          {{ t.title }}
         </h1>
         <p class="mt-4 text-lg text-text-main/70">
-          Kumpulan studi kasus, eksperimen, dan solusi yang telah saya bangun.
+          {{ t.desc }}
         </p>
       </div>
 
@@ -73,7 +94,7 @@ function setFilter(tag) {
         v-if="filteredProjects.length === 0"
         class="mt-12 text-center text-text-main/70"
       >
-        <p>Tidak ada proyek yang ditemukan dengan tag "{{ activeFilter }}".</p>
+        <p>{{ t.empty }} "{{ activeFilter }}".</p>
       </div>
     </div>
   </main>

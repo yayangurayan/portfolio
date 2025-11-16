@@ -2,7 +2,7 @@
 import { RouterLink } from 'vue-router'
 import BaseButton from '@/components/BaseButton.vue'
 import { computed } from 'vue'
-import { useLang } from '@/composables/useLang'
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
 
 const props = defineProps({
   project: {
@@ -27,7 +27,7 @@ const ctaText = computed(() => (lang.value === 'id' ? 'Lihat Studi Kasus' : 'Vie
     <div class="aspect-video overflow-hidden">
       <img
         :src="project.imageUrl"
-        :alt="project.title"
+        :alt="title"
         class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
     </div>

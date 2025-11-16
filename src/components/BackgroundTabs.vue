@@ -1,9 +1,9 @@
 <script setup>
-import { ref, computed } from 'vue' // Import computed
+import { ref, computed } from 'vue'
 import BackgroundItem from './BackgroundItem.vue'
-import { useLang } from '@/composables/useLang' // Import
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
 
-const { lang } = useLang() // Gunakan
+const { lang } = useLang()
 
 const activeTab = ref('experience') // Default tab
 

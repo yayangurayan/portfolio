@@ -1,11 +1,11 @@
 <script setup>
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 // import { useMouse } from '@vueuse/core' // Dihapus
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue' // Tambahkan watchEffect
 import ThemeToggle from './components/ThemeToggle.vue'
 import MobileMenu from './components/MobileMenu.vue'
-import LanguageToggle from './components/LanguageToggle.vue' // Import
-import { useLang } from './composables/useLang' // Import
+import LanguageToggle from './components/LanguageToggle.vue'
+import { useLang } from './composable/useLang' // PERBAIKAN: Path
 
 // --- Menghapus Kursor Kustom ---
 // const { x, y } = useMouse() // Dihapus
@@ -36,8 +36,14 @@ const navLinks = computed(() => navLinksData[lang.value])
 const mobileMenuOpen = ref(false)
 
 // --- Page Transitions (WDD 3.2) ---
-// Kita akan gunakan nama route sebagai 'key' untuk transisi
 const route = useRoute()
+
+// PERBAIKAN: Tutup menu mobile jika navigasi terjadi (mis. tombol back browser)
+watchEffect(() => {
+  if (route.path) {
+    mobileMenuOpen.value = false
+  }
+})
 </script>
 
 <template>
@@ -83,6 +89,7 @@ const route = useRoute()
 
         <!-- Menu Mobile (Hamburger) - Sekarang Fungsional -->
         <div class="flex lg:hidden">
+          <LanguageToggle class="mr-2" />
           <ThemeToggle class="mr-2" />
           <button
             type="button"
@@ -122,9 +129,7 @@ const route = useRoute()
 
     <!-- Footer -->
     <footer class="w-full border-t border-white/10 py-8">
-      <div
-        class="mx-auto max-w-7xl px-4 text-center text-sm text-text-main/50 lg:px-8"
-      >
+      <div class="mx-auto max-w-7xl px-4 text-center text-sm text-text-main/50 lg:px-8">
         © 2025 Andrian. Dibuat dengan Vue.js & Tailwind CSS.
       </div>
     </footer>
@@ -142,7 +147,7 @@ const route = useRoute()
   opacity: 0;
 }
 
-/* Menghapus style cursor kustom */
+/* PERBAIKAN: Menghapus style cursor kustom */
 body:hover {
   cursor: default; /* Kembali ke kursor normal */
 }

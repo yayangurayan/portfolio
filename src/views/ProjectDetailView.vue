@@ -3,14 +3,13 @@ import { computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { projects } from '@/data/projects.js'
 import BaseButton from '@/components/BaseButton.vue'
-import { useLang } from '@/composables/useLang' // Import
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
 
-const { lang } = useLang() // Gunakan
+const { lang } = useLang()
 const route = useRoute()
 const projectId = route.params.id
 
 // WDD 3.1: Halaman Detail Proyek (Dinamis)
-// Cari proyek berdasarkan ID dari route
 const project = computed(() => {
   return projects.find((p) => p.id === projectId)
 })
@@ -25,7 +24,10 @@ const t = computed(() => {
     demo: lang.value === 'id' ? 'Lihat Live Demo' : 'View Live Demo',
     repo: lang.value === 'id' ? 'Repositori Kode' : 'Code Repository',
     errTitle: lang.value === 'id' ? 'Proyek tidak ditemukan' : 'Project not found',
-    errDesc: lang.value === 'id' ? 'Sepertinya proyek yang kamu cari tidak ada.' : 'It seems the project you are looking for does not exist.',
+    errDesc:
+      lang.value === 'id'
+        ? 'Sepertinya proyek yang kamu cari tidak ada.'
+        : 'It seems the project you are looking for does not exist.',
     errBtn: lang.value === 'id' ? 'Lihat Proyek Lain' : 'View Other Projects',
   }
 })
@@ -60,7 +62,9 @@ const solution = computed(() => project.value?.[`solution_${lang.value}`])
 
       <!-- Header Proyek -->
       <span class="font-mono text-sm uppercase text-primary">{{ subtitle }}</span>
-      <h1 class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl">
+      <h1
+        class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl"
+      >
         {{ title }}
       </h1>
 

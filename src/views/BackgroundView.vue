@@ -1,7 +1,7 @@
 <script setup>
 import BackgroundTabs from '@/components/BackgroundTabs.vue'
 import { computed } from 'vue'
-import { useLang } from '@/composables/useLang'
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
 
 const { lang } = useLang()
 
@@ -23,7 +23,9 @@ const t = computed(() => {
       <!-- Judul Halaman -->
       <div class="mb-12 max-w-3xl">
         <span class="font-mono text-sm uppercase text-primary">{{ t.span }}</span>
-        <h1 class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl">
+        <h1
+          class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl"
+        >
           {{ t.title }}
         </h1>
         <p class="mt-4 text-lg text-text-main/70">

@@ -1,7 +1,7 @@
 <script setup>
 import BaseButton from '@/components/BaseButton.vue'
 import { computed } from 'vue'
-import { useLang } from '@/composables/useLang'
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
 
 const { lang } = useLang()
 
@@ -69,12 +69,12 @@ const t = computed(() => {
         : 'Currently, I am a Digital Business student at Universitas Negeri Medan. My passion lies at the intersection of technology and business, with a specific mission: to drive digital transformation in Indonesia, especially for Micro, Small, and Medium Enterprises (MSMEs).',
     p2:
       lang.value === 'id'
-        ? "Misi ini saya wujudkan melalui keahlian teknis saya. Sebagai seorang <strong>programmer</strong>, saya fokus membangun aplikasi yang fungsional dan elegan. Proyek seperti Tapstok (sistem stok NFC) adalah bukti nyata bagaimana saya menerapkan teknologi untuk memecahkan masalah efisiensi di dunia nyata."
-        : 'I bring this mission to life through my technical expertise. As a <strong>programmer</strong>, I focus on building functional and elegant applications. Projects like Tapstok (NFC stock system) are tangible proof of how I apply technology to solve real-world efficiency problems.',
+        ? "Misi ini saya wujudkan melalui keahlian teknis saya. Sebagai seorang <strong class='font-semibold text-text-main'>programmer</strong>, saya fokus membangun aplikasi yang fungsional dan elegan. Proyek seperti Tapstok (sistem stok NFC) adalah bukti nyata bagaimana saya menerapkan teknologi untuk memecahkan masalah efisiensi di dunia nyata."
+        : 'I bring this mission to life through my technical expertise. As a <strong class=\'font-semibold text-text-main\'>programmer</strong>, I focus on building functional and elegant applications. Projects like Tapstok (NFC stock system) are tangible proof of how I apply technology to solve real-world efficiency problems.',
     p3:
       lang.value === 'id'
-        ? "Namun, membangun solusi saja tidak cukup. Di sinilah persona saya yang lain berperan: sebagai seorang <strong>analis</strong>. Ketertarikan mendalam saya pada analisis pasar modal, yang diasah melalui kepemimpinan di GIBEI UNIMED dan sertifikasi BEI, telah melatih saya untuk berpikir strategis dan mengambil keputusan berbasis data. Saya tidak hanya membangun; saya menganalisis 'mengapa' di baliknya."
-        : "But building solutions isn't enough. This is where my other persona comes in: as an <strong>analyst</strong>. My deep interest in capital market analysis, honed through leadership at GIBEI UNIMED and IDX certification, has trained me to think strategically and make data-driven decisions. I don't just build; I analyze the 'why' behind it.",
+        ? "Namun, membangun solusi saja tidak cukup. Di sinilah persona saya yang lain berperan: sebagai seorang <strong class='font-semibold text-text-main'>analis</strong>. Ketertarikan mendalam saya pada analisis pasar modal, yang diasah melalui kepemimpinan di GIBEI UNIMED dan sertifikasi BEI, telah melatih saya untuk berpikir strategis dan mengambil keputusan berbasis data. Saya tidak hanya membangun; saya menganalisis 'mengapa' di baliknya."
+        : "But building solutions isn't enough. This is where my other persona comes in: as an <strong class='font-semibold text-text-main'>analyst</strong>. My deep interest in capital market analysis, honed through leadership at GIBEI UNIMED and IDX certification, has trained me to think strategically and make data-driven decisions. I don't just build; I analyze the 'why' behind it.",
     philosophySpan: lang.value === 'id' ? 'Filosofi Saya' : 'My Philosophy',
     philosophyTitle:
       lang.value === 'id' ? 'Pendekatan Saya dalam Bekerja' : 'My Approach to Work',
@@ -92,11 +92,15 @@ const t = computed(() => {
     <!-- Bagian 1: Header & Intro -->
     <div class="relative overflow-hidden py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+        <div
+          class="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2"
+        >
           <!-- Kolom Teks -->
           <div>
             <span class="font-mono text-sm uppercase text-primary">{{ t.span }}</span>
-            <h1 class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl">
+            <h1
+              class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl"
+            >
               {{ t.title }}
             </h1>
             <p class="mt-6 text-lg leading-8 text-text-main/70">
@@ -129,7 +133,9 @@ const t = computed(() => {
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl lg:text-center">
           <span class="font-mono text-sm uppercase text-primary">{{ t.philosophySpan }}</span>
-          <h2 class="mt-2 font-poppins text-3xl font-bold tracking-tight text-text-main sm:text-4xl">
+          <h2
+            class="mt-2 font-poppins text-3xl font-bold tracking-tight text-text-main sm:text-4xl"
+          >
             {{ t.philosophyTitle }}
           </h2>
           <p class="mt-6 text-lg leading-8 text-text-main/70">

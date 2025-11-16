@@ -1,10 +1,10 @@
 <script setup>
-import { ref, computed } from 'vue' // Import computed
+import { ref, computed } from 'vue'
 import BaseButton from '@/components/BaseButton.vue'
 import FormField from '@/components/FormField.vue'
-import { useLang } from '@/composables/useLang' // Import
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
 
-const { lang } = useLang() // Gunakan
+const { lang } = useLang()
 
 // Data Kontak dari CV
 const contactDetailsData = {
@@ -39,7 +39,7 @@ const contactDetailsData = {
 }
 const contactDetails = computed(() => contactDetailsData[lang.value])
 
-// Data Sosial Media dari HomeView
+// PERBAIKAN: Ikon SVG untuk social links
 const socialLinks = [
   {
     name: 'GitHub',
@@ -60,7 +60,7 @@ const formState = ref({
   message: '',
 })
 
-// PENTING: Ganti dengan endpoint Formspree kamu
+// Endpoint Formspree kamu
 const formspreeEndpoint = 'https://formspree.io/f/mqawyvyy'
 
 // Teks dinamis
@@ -77,7 +77,7 @@ const t = computed(() => {
     labelName: lang.value === 'id' ? 'Nama Lengkap' : 'Full Name',
     labelEmail: lang.value === 'id' ? 'Email' : 'Email',
     labelMessage: lang.value === 'id' ? 'Pesan' : 'Message',
-    btnSend: lang.value === 'id' ? 'Kirim Pesan' : 'Send Message',
+    btnSend: lang.value === 'id' ? 'Kirim Pesan' : 'Kirim Pesan',
   }
 })
 </script>
@@ -89,7 +89,9 @@ const t = computed(() => {
         <!-- Kolom Teks (Kiri) -->
         <div class="max-w-xl lg:max-w-lg">
           <span class="font-mono text-sm uppercase text-primary">{{ t.span }}</span>
-          <h1 class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl">
+          <h1
+            class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl"
+          >
             {{ t.title }}
           </h1>
           <p class="mt-4 text-lg leading-8 text-text-main/70">
@@ -135,7 +137,7 @@ const t = computed(() => {
               class="text-text-main/70 transition-colors hover:text-primary"
             >
               <span class="sr-only">{{ social.name }}</span>
-              <!-- Ikon SVG Asli -->
+              <!-- PERBAIKAN: Ikon SVG Asli -->
               <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" v-html="social.icon"></svg>
             </a>
           </div>

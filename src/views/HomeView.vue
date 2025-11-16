@@ -1,12 +1,12 @@
 <script setup>
 import BaseButton from '@/components/BaseButton.vue'
 import ProjectCard from '@/components/ProjectCard.vue'
-import { ref, computed } from 'vue' // Import computed
+import { ref, computed } from 'vue'
 import { useTransition, TransitionPresets } from '@vueuse/core'
 import { projects } from '@/data/projects.js'
-import { useLang } from '@/composables/useLang' // Import
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
 
-const { lang } = useLang() // Gunakan
+const { lang } = useLang()
 
 // --- Animasi Sederhana untuk Teks (WDD 3.2) ---
 const countOne = ref(0)
@@ -26,7 +26,7 @@ const outputThree = useTransition(countThree, {
 })
 countThree.value = featuredProjects.length // Set ke jumlah proyek unggulan
 
-// Data untuk social links
+// PERBAIKAN: Ikon SVG untuk social links
 const socialLinks = [
   {
     name: 'GitHub',
@@ -80,14 +80,11 @@ const t = computed(() => {
             {{ t.slogan }}
             <span class="text-secondary">{{ t.sloganHighlight }}</span>
           </h1>
-          <!-- Sub-headline / Persona (WDD 7.1 & CV Summary) -->
           <p class="mt-6 font-poppins text-lg leading-8 text-text-main/70" v-html="t.subtitle"></p>
-          <!-- Tombol CTA (WDD 1.4 & 3.1) -->
           <div class="mt-10 flex items-center gap-x-6">
             <BaseButton to="/contact" variant="primary">{{ t.ctaContact }}</BaseButton>
             <BaseButton to="/projects" variant="outline">{{ t.ctaProjects }} &rarr;</BaseButton>
           </div>
-          <!-- Social Links (WDD 3.1) -->
           <div class="mt-12 flex items-center gap-x-6">
             <span class="font-mono text-sm text-text-main/50">{{ t.connect }}</span>
             <a
@@ -99,7 +96,7 @@ const t = computed(() => {
               class="flex h-8 w-8 items-center justify-center rounded-full border border-text-main/30 text-text-main/70 transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary"
             >
               <span class="sr-only">{{ social.name }}</span>
-              <!-- Ikon SVG Asli -->
+              <!-- PERBAIKAN: Ikon SVG Asli -->
               <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" v-html="social.icon"></svg>
             </a>
           </div>
@@ -148,10 +145,7 @@ const t = computed(() => {
             {{ t.featuredSubtitle }}
           </p>
         </div>
-        <!-- Grid Proyek Unggulan -->
-        <div
-          class="mt-12 grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3"
-        >
+        <div class="mt-12 grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
           <ProjectCard
             v-for="project in featuredProjects"
             :key="project.id"

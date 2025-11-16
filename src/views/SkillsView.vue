@@ -1,7 +1,7 @@
 <script setup>
 import SkillBar from '@/components/SkillBar.vue'
 import { computed } from 'vue'
-import { useLang } from '@/composables/useLang'
+import { useLang } from '@/composable/useLang' // PERBAIKAN: Path
 
 const { lang } = useLang()
 
@@ -132,7 +132,9 @@ const languages = computed(() => languagesData[lang.value])
       <!-- Judul Halaman -->
       <div class="mb-16 max-w-3xl">
         <span class="font-mono text-sm uppercase text-primary">{{ t.span }}</span>
-        <h1 class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl">
+        <h1
+          class="mt-2 font-poppins text-4xl font-bold tracking-tight text-text-main sm:text-5xl"
+        >
           {{ t.title }}
         </h1>
         <p class="mt-4 text-lg text-text-main/70">

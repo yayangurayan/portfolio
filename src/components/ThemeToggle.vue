@@ -1,5 +1,5 @@
 <script setup>
-import { useTheme } from './composables/useTheme'
+import { useTheme } from '@/composable/useTheme' // PERBAIKAN: Path
 
 const { isDark } = useTheme()
 </script>
